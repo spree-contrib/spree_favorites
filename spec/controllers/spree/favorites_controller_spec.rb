@@ -101,7 +101,7 @@ describe Spree::FavoritesController do
       @favorites.stub(:page).and_return(@favorites)
       @favorites.stub(:per).and_return(@favorites)
       Spree::Config.stub(:favorites_per_page).and_return('favorites_per_page')
-      @user = mock_model(Spree::User, :favorite_products => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
+      @user = mock_model(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
       controller.stub(:authenticate_spree_user!).and_return(true)
       controller.stub(:spree_current_user).and_return(@user)
     end
@@ -112,7 +112,7 @@ describe Spree::FavoritesController do
     end
 
     it "finds favorite products of current user" do
-      @user.should_receive(:favorite_products)
+      @user.should_receive(:favorites)
       send_request
     end
 
