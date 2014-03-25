@@ -1,20 +1,20 @@
 <div data-hook="account_my_favorite_products" class="account-my-favorite-products commonform">
   <h3><%= Spree.t(:my_favorites) %></h3>
-  <% if @favoritess.present? %>
+  <% if @favorites.present? %>
     <table class="favorite-products order-summary">
       <thead>
       <tr>
         <th class="favorite-product-image"><%= Spree.t(:product_image) %></th>
         <th class="favorite-product-name"><%= Spree.t(:product_name) %></th>
-        <th class="favorite-product-action">Action</th>        
+        <th class="favorite-product-action"><%= Spree.t(:action)%></th>
       </tr>
       </thead>
       <tbody>
-      <% @favorits.each do |product| %>
-        <tr class="<%= cycle('even', 'odd') %>" id="favorite_product_<%= product.id %>">
-          <td class="favorite-product-image"><%= link_to small_image(product), product_path(product) %></td>
-          <td class="favorite-product-name"><%= product.name %></td>
-          <td class="favorite-product-remove"><%= link_to 'Remove', favorite_path(:id => product.id), :method => :delete, :remote => true %>
+      <% @favorites.each do |favorite| %>
+        <tr class="<%= cycle('even', 'odd') %>" id="favorite_<%= favorite.id %>">
+          <td class="favorite-product-image"><%= link_to small_image(favorite.favorable), product_path(favorite.favorable) %></td>
+          <td class="favorite-product-name"><%= favorite.favorable.name %></td>
+          <td class="favorite-product-remove"><%= link_to Spree.t(:remove), favorite_path(favorite), :method => :delete, :remote => true %>
         </tr>
       <% end %>
       </tbody>
@@ -22,6 +22,5 @@
   <% else %>
     <p><%= Spree.t(:you_have_no_favorites_yet) %></p>
   <% end %>
-  
   <%= paginate @favorites %>
-</div>
+</div
