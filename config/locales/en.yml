@@ -6,5 +6,7 @@ en:
     add_favorite: "Add Favorite"
     favorites_settings: "Favorite Settings"
     favorites_per_page: "Per Page"
+    my_favorites: My Favorites
     remove_favorite: "Remove Favorite"
     successfully_added_favorite: Successfully added favorite.
+    you_have_no_favorites_yet: You have no favorites yet.

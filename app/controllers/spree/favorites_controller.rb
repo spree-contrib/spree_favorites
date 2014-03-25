@@ -9,7 +9,7 @@ module Spree
     end
 
     def create
-      favorite = spree_current_user.favorites.new favorable_id: params[:id], favorable_type: params[:type]
+      favorite = spree_current_user.favorites.new favorable_id: params[:favorable_id], favorable_type: params[:favorable_type]
       if @success = favorite.save
         @message = Spree.t(:successfully_added_favorite)
       else
@@ -29,7 +29,7 @@ module Spree
     private
 
       def find_favorite
-        @favorite = spree_current_user.favorites.find(params[:id])
+        @favorite = spree_current_user.favorites.where(favorable_id: params[:favorable_id], favorable_type: params[:favorable_type])
       end
 
   end

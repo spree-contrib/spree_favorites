@@ -11,7 +11,7 @@ describe Spree::FavoritesController do
 
   shared_examples_for "request which finds favorite product" do
     it "finds favorite product" do
-      @favorites.should_receive(:find).with('id')
+      @favorites.should_receive(:where).with(favorable_id: 'id', favorable_type: 'Spree::Product')
       send_request
     end
 
@@ -22,56 +22,71 @@ describe Spree::FavoritesController do
   end
 
   describe 'POST create' do
-    def send_request
-      post :create, :id => 1, :format => :js, :type => 'Spree::Product', :use_route => 'spree'
-    end
 
-    before(:each) do
-      @favorite = mock_model(Spree::Favorite, :save => true)
-      controller.stub(:authenticate_spree_user!).and_return(true)
-      Spree::Favorite.stub(:new).and_return(@favorite)
-      @user = mock_model(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
-      controller.stub(:spree_current_user).and_return(@user)
-    end
+    context 'when invalid' do
+      it 'fails' do
+        # TODO remove this when testing non logged in users
+        @user = mock_model(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
+        controller.stub(:authenticate_spree_user!).and_return(true)
+        controller.stub(:spree_current_user).and_return(@user)
 
-    it_behaves_like "request which requires user authentication"
-
-    it "creates favorite" do
-      Spree::Favorite.should_receive(:new).with(favorable_id: 1, favorable_type: 'Spree::Product')
-      send_request
-    end
-
-    it "saves favorite" do
-      @favorite.should_receive(:save)
-      send_request
-    end
-
-    context "when favorite saved successfully" do
-      it "renders create" do
-        send_request
-        response.should render_template(:create)
-      end
-
-      it "should assign success message" do
-        send_request
-        assigns(:message).should eq("Successfully added favorite.")
+        post :create, :id => 1, :format => :js, :type => 'Spree::Order', :use_route => 'spree'
+        assigns(:message).should match("Favorable type is not included in the list")
       end
     end
 
-    context "when favorite not saved sucessfully" do
+    context 'when valid' do
+      def send_request
+        post :create, :favorable_id => 1, :format => :js, :favorable_type => 'Spree::Product', :use_route => 'spree'
+      end
+
       before(:each) do
-        @favorite.stub(:save).and_return(false)
-        @favorite.stub_chain(:errors, :full_messages).and_return(["Already added as favorite."])
+        @favorite = mock_model(Spree::Favorite, :save => true)
+        controller.stub(:authenticate_spree_user!).and_return(true)
+        Spree::Favorite.stub(:new).and_return(@favorite)
+        @user = mock_model(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
+        controller.stub(:spree_current_user).and_return(@user)
       end
 
-      it "renders create template" do
+      it_behaves_like "request which requires user authentication"
+
+      it "creates favorite" do
+        Spree::Favorite.should_receive(:new).with(favorable_id: 1, favorable_type: 'Spree::Product')
         send_request
-        response.should render_template(:create)
       end
 
-      it "should assign error message" do
+      it "saves favorite" do
+        @favorite.should_receive(:save)
         send_request
-        assigns(:message).should eq("Already added as favorite.")
+      end
+
+      context "when favorite saved successfully" do
+        it "renders create" do
+          send_request
+          response.should render_template(:create)
+        end
+
+        it "should assign success message" do
+          send_request
+          assigns(:message).should eq("Successfully added favorite.")
+        end
+      end
+
+      context "when favorite not saved sucessfully" do
+        before(:each) do
+          @favorite.stub(:save).and_return(false)
+          @favorite.stub_chain(:errors, :full_messages).and_return(["Already added as favorite."])
+        end
+
+        it "renders create template" do
+          send_request
+          response.should render_template(:create)
+        end
+
+        it "should assign error message" do
+          send_request
+          assigns(:message).should eq("Already added as favorite.")
+        end
       end
     end
   end
@@ -119,13 +134,13 @@ describe Spree::FavoritesController do
 
   describe 'destroy' do
     def send_request(params = {})
-      post :destroy, params.merge({:use_route => 'spree', :method => :delete, :format => :js, :id => 'id'})
+      post :destroy, params.merge({:use_route => 'spree', :method => :delete, :format => :js, :favorable_id => 'id', :favorable_type => 'Spree::Product'})
     end
 
     before do
       @favorite = mock_model(Spree::Favorite)
       @favorites = double('spree_favorites')
-      @favorites.stub(:find).and_return(@favorite)
+      @favorites.stub(:where).with(favorable_id: 'id', favorable_type: 'Spree::Product').and_return(@favorite)
       @user = mock_model(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
       controller.stub(:authenticate_spree_user!).and_return(true)
       controller.stub(:spree_current_user).and_return(@user)
