@@ -30,10 +30,11 @@ require 'spree/testing_support/authorization_helpers'
 require 'spree/testing_support/url_helpers'
 
 # Requires factories defined in lib/spree_favorite_products/factories.rb
-# require 'spree_favorite_products/factories'
+require 'spree_favorites/factories'
 
 RSpec.configure do |config|
-  # config.include FactoryGirl::Syntax::Methods
+  config.include FactoryGirl::Syntax::Methods
+  config.include IntegrationHelpers
 
   # == URL Helpers
   #
