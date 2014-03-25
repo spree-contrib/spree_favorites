@@ -29,7 +29,7 @@ module Spree
     private
 
       def find_favorite
-        @favorite = spree_current_user.favorites.where(favorable_id: params[:favorable_id], favorable_type: params[:favorable_type])
+        @favorite = spree_current_user.favorites.find(params[:id])
       end
 
   end

@@ -11,7 +11,7 @@ describe Spree::FavoritesController do
 
   shared_examples_for "request which finds favorite product" do
     it "finds favorite product" do
-      @favorites.should_receive(:where).with(favorable_id: 'id', favorable_type: 'Spree::Product')
+      @favorites.should_receive(:find).with('id')
       send_request
     end
 
@@ -134,13 +134,13 @@ describe Spree::FavoritesController do
 
   describe 'destroy' do
     def send_request(params = {})
-      post :destroy, params.merge({:use_route => 'spree', :method => :delete, :format => :js, :favorable_id => 'id', :favorable_type => 'Spree::Product'})
+      post :destroy, params.merge({:use_route => 'spree', :method => :delete, :format => :js, :id => 'id'})
     end
 
     before do
       @favorite = mock_model(Spree::Favorite)
       @favorites = double('spree_favorites')
-      @favorites.stub(:where).with(favorable_id: 'id', favorable_type: 'Spree::Product').and_return(@favorite)
+      @favorites.stub(:find).and_return(@favorite)
       @user = mock_model(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
       controller.stub(:authenticate_spree_user!).and_return(true)
       controller.stub(:spree_current_user).and_return(@user)
