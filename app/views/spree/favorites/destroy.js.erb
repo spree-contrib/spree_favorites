@@ -1,0 +1,7 @@
+<% if @success %>
+  if($('.favorite_link').length) {
+    $('.favorite_link').attr('href', '<%= favorites_path(:id => @favorite.favorable_id, :type => @favorite.favorable_type) %>').data('method', 'post').text('<%= Spree.t(:add_favorite) %>')
+  } else {
+    $("#favorite_<%= @favorite.favorable_type.snakecase %>_<%= @favorite.favorable_id %>").remove();
+  }
+<% end %>

@@ -1,0 +1,3 @@
+<% if @success %>
+  $('.favorite_link').attr('href', '<%= favorite_path(:id => params[:id]) %>').data('method', 'delete').text('<%= Spree.t(:remove_favorite) %>')
+<% end %>
