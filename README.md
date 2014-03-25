@@ -51,4 +51,4 @@ Credits
 
 Inspired by [https://github.com/vinsol/spree_favorite_products](https://github.com/vinsol/spree_favorite_products)
 
-Copyright (c) 2014 [Jeff Dutil](https://github.com/JDutil), released under the New BSD License
+Copyright (c) 2014 [Jeff Dutil](https://github.com/JDutil), released under the [New BSD License](https://github.com/JDutil/spree_favorites/blob/master/LICENSE)
