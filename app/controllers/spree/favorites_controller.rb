@@ -2,16 +2,16 @@ module Spree
   class FavoritesController < Spree::StoreController
 
     before_filter :authenticate_spree_user!
-    before_filter :find_favorite_product, :only => :destroy
+    before_filter :find_favorite, :only => :destroy
 
     def index
       @favorites = spree_current_user.favorite_products.page(params[:page]).per(Spree::Config.favorites_per_page)
     end
 
     def create
-      favorite = spree_current_user.favorites.new :product_id => params[:id]
+      favorite = spree_current_user.favorites.new favorable_id: params[:id], favorable_type: params[:type]
       if @success = favorite.save
-        @message = "Product has been successfully marked as favorite"
+        @message = Spree.t(:successfully_added_favorite)
       else
         @message = favorite.errors.full_messages.to_sentence
       end
@@ -28,8 +28,8 @@ module Spree
 
     private
 
-      def find_favorite_product
-        @favorite = spree_current_user.favorites.joins(:product).readonly(false).where(:spree_products => {:id => params[:id]}).first
+      def find_favorite
+        @favorite = spree_current_user.favorites.find(params[:id])
       end
 
   end

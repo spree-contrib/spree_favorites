@@ -11,12 +11,7 @@ describe Spree::FavoritesController do
 
   shared_examples_for "request which finds favorite product" do
     it "finds favorite product" do
-      @current_user_favorites.should_receive(:where).with(:spree_products => {:id => 'id'})
-      send_request
-    end
-
-    it "sets readonly to false" do
-      @current_user_favorites.should_receive(:readonly).with(false)
+      @favorites.should_receive(:find).with('id')
       send_request
     end
 
@@ -28,7 +23,7 @@ describe Spree::FavoritesController do
 
   describe 'POST create' do
     def send_request
-      post :create, :id => 1, :format => :js, :use_route => 'spree'
+      post :create, :id => 1, :format => :js, :type => 'Spree::Product', :use_route => 'spree'
     end
 
     before(:each) do
@@ -41,9 +36,8 @@ describe Spree::FavoritesController do
 
     it_behaves_like "request which requires user authentication"
 
-      
     it "creates favorite" do
-      Spree::Favorite.should_receive(:new).with(:product_id => 1)
+      Spree::Favorite.should_receive(:new).with(favorable_id: 1, favorable_type: 'Spree::Product')
       send_request
     end
 
@@ -60,14 +54,14 @@ describe Spree::FavoritesController do
 
       it "should assign success message" do
         send_request
-        assigns(:message).should eq("Product has been successfully marked as favorite")
+        assigns(:message).should eq("Successfully added favorite.")
       end
     end
 
     context "when favorite not saved sucessfully" do
       before(:each) do
         @favorite.stub(:save).and_return(false)
-        @favorite.stub_chain(:errors, :full_messages).and_return(["Product already marked as favorite"])
+        @favorite.stub_chain(:errors, :full_messages).and_return(["Already added as favorite."])
       end
 
       it "renders create template" do
@@ -77,7 +71,7 @@ describe Spree::FavoritesController do
 
       it "should assign error message" do
         send_request
-        assigns(:message).should eq("Product already marked as favorite")
+        assigns(:message).should eq("Already added as favorite.")
       end
     end
   end
@@ -130,11 +124,8 @@ describe Spree::FavoritesController do
 
     before do
       @favorite = mock_model(Spree::Favorite)
-      @current_user_favorites = double('spree_favorites')
-      @current_user_favorites.stub(:where).and_return([@favorite])
-      @current_user_favorites.stub(:readonly).and_return(@current_user_favorites)
       @favorites = double('spree_favorites')
-      @favorites.stub(:joins).with(:product).and_return(@current_user_favorites)
+      @favorites.stub(:find).and_return(@favorite)
       @user = mock_model(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
       controller.stub(:authenticate_spree_user!).and_return(true)
       controller.stub(:spree_current_user).and_return(@user)
@@ -161,7 +152,7 @@ describe Spree::FavoritesController do
         it "sets @success to true" do
           send_request
           assigns(:success).should eq(true)
-        end 
+        end
       end
 
       context 'when not destroyed' do

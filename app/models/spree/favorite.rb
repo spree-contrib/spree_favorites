@@ -6,7 +6,7 @@ module Spree
 
     validates :favorable, presence: true
     validates :user, presence: true
-    validates :user_id, uniqueness: { scope: [:favorable_id, :favorable_type], message: 'already favorited' }
+    validates :user_id, uniqueness: { scope: [:favorable_id, :favorable_type], message: 'Already added as favorite.' }
 
   end
 end
