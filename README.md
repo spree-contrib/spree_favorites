@@ -46,6 +46,11 @@ Simply add this require statement to your spec_helper:
 require 'spree_favorites/factories'
 ```
 
+TODO
+----
+
+* Rewrite add/remove links to use data attributes, and unobtrusive javascript to send requests to an API controller.
+
 Credits
 -------
 

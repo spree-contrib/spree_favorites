@@ -1,7 +1,7 @@
 <% if @success %>
-  if($('.favorite_link').length) {
-    $('.favorite_link').attr('href', '<%= favorites_path(:favorable_id => @favorite.favorable_id, :favorable_type => @favorite.favorable_type) %>').data('method', 'post').text('<%= Spree.t(:add_favorite) %>')
+  if($("#favorable_<%= @favorable_type.demodulize.underscore %>_<%= @favorable_id %>").length) {
+    $("#favorable_<%= @favorable_type.demodulize.underscore %>_<%= @favorable_id %>").attr('href', '<%= favorites_path(favorable_id: @favorite.favorable_id, favorable_type: @favorite.favorable_type) %>').data('method', 'post').text('<%= Spree.t(:add_favorite) %>')
   } else {
-    $("#favorite_<%= @favorite.favorable_id %>").remove();
+    $("#favorite_<%= @favorite.id %>").remove();
   }
 <% end %>

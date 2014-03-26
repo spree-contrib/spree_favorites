@@ -14,7 +14,7 @@
         <tr class="<%= cycle('even', 'odd') %>" id="favorite_<%= favorite.id %>">
           <td class="favorite-product-image"><%= link_to small_image(favorite.favorable), product_path(favorite.favorable) %></td>
           <td class="favorite-product-name"><%= favorite.favorable.name %></td>
-          <td class="favorite-product-remove"><%= link_to Spree.t(:remove), favorite_path(favorite), :method => :delete, :remote => true %>
+          <td class="favorite-product-remove"><%= link_to Spree.t(:remove), favorite_path(favorite), method: :delete, remote: true %>
         </tr>
       <% end %>
       </tbody>

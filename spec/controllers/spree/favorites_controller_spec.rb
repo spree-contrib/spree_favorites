@@ -2,13 +2,6 @@ require 'spec_helper'
 
 describe Spree::FavoritesController do
 
-  shared_examples_for "request which requires user authentication" do
-    it "authenticates user" do
-      controller.should_receive(:authenticate_spree_user!)
-      send_request      
-    end
-  end
-
   shared_examples_for "request which finds favorite product" do
     it "finds favorite product" do
       @favorites.should_receive(:find).with('id')
@@ -27,7 +20,6 @@ describe Spree::FavoritesController do
       it 'fails' do
         # TODO remove this when testing non logged in users
         @user = mock_model(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
-        controller.stub(:authenticate_spree_user!).and_return(true)
         controller.stub(:spree_current_user).and_return(@user)
 
         post :create, :id => 1, :format => :js, :type => 'Spree::Order', :use_route => 'spree'
@@ -47,8 +39,6 @@ describe Spree::FavoritesController do
         @user = mock_model(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
         controller.stub(:spree_current_user).and_return(@user)
       end
-
-      it_behaves_like "request which requires user authentication"
 
       it "creates favorite" do
         Spree::Favorite.should_receive(:new).with(favorable_id: 1, favorable_type: 'Spree::Product')
@@ -102,13 +92,7 @@ describe Spree::FavoritesController do
       @favorites.stub(:per).and_return(@favorites)
       Spree::Config.stub(:favorites_per_page).and_return('favorites_per_page')
       @user = mock_model(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
-      controller.stub(:authenticate_spree_user!).and_return(true)
       controller.stub(:spree_current_user).and_return(@user)
-    end
-
-    it "authenticates user" do
-      controller.should_receive(:authenticate_spree_user!)
-      send_request
     end
 
     it "finds favorite products of current user" do
@@ -142,11 +126,9 @@ describe Spree::FavoritesController do
       @favorites = double('spree_favorites')
       @favorites.stub(:find).and_return(@favorite)
       @user = mock_model(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
-      controller.stub(:authenticate_spree_user!).and_return(true)
       controller.stub(:spree_current_user).and_return(@user)
     end
 
-    it_behaves_like "request which requires user authentication"
     it_behaves_like "request which finds favorite product"
 
     context 'when @favorite  exist' do

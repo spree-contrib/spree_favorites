@@ -10,8 +10,11 @@ module Spree
 
     validates :favorable, presence: true
     validates :favorable_type, presence: true, inclusion: { in: FAVORABLES_ALLOWED }
-    validates :user, presence: true
-    validates :user_id, uniqueness: { scope: [:favorable_id, :favorable_type], message: 'Already added as favorite.' }
+
+    validates :user_id, uniqueness: { allow_blank: true, message: 'Already added as favorite.', scope: [:favorable_id, :favorable_type] }
+    validates :user_token, uniqueness: { allow_blank: true, message: 'Already added as favorite.', scope: [:favorable_id, :favorable_type] }
+
+    scope :by_user_token, -> (token) { where(user_token: token) }
 
   end
 end
