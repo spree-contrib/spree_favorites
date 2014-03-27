@@ -4,6 +4,7 @@
 en:
   spree:
     add_favorite: "Add Favorite"
+    favorites: Favorites
     favorites_settings: "Favorite Settings"
     favorites_per_page: "Per Page"
     my_favorites: My Favorites
