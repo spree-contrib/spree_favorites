@@ -7,7 +7,7 @@ module Spree
       if try_spree_current_user
         @favorites = spree_current_user.favorites.page(params[:page]).per(Spree::Config.favorites_per_page)
       elsif cookies.signed[:user_token].present?
-        @favorites = Favorite.by_user_token(cookies[:user_token]).page(params[:page]).per(Spree::Config.favorites_per_page)
+        @favorites = Favorite.by_user_token(cookies.signed[:user_token]).page(params[:page]).per(Spree::Config.favorites_per_page)
       else
         @favorites = []
       end
