@@ -24,7 +24,7 @@ describe "Favorites - User Tracking", js: true do
 
       page.should have_content('Logged in successfully')
       expect(user.favorites.count).to eql(1)
-      expect(Spree::Favorite.last.user_token).to be_nil
+      expect(Spree::Favorite.last.guest_token).to be_nil
     end
 
     it 'should merge to next customer sign up' do
@@ -41,7 +41,7 @@ describe "Favorites - User Tracking", js: true do
 
       page.should have_content('Welcome! You have signed up successfully.')
       expect(Spree.user_class.last.favorites.count).to eql(1)
-      expect(Spree::Favorite.last.user_token).to be_nil
+      expect(Spree::Favorite.last.guest_token).to be_nil
     end
 
   end
