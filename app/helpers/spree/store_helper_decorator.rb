@@ -1,11 +1,5 @@
 module Spree
-  StoreController.class_eval do
-
-    helper_method :favorite_count,
-                  :get_favorite,
-                  :has_favorite?
-
-    private
+  StoreHelper.module_eval do
 
     def favorite_count
       if try_spree_current_user
