@@ -16,5 +16,7 @@ module Spree
 
     scope :by_guest_token, -> (token) { where(guest_token: token) }
 
+    default_scope { order('created_at DESC') } 
+
   end
 end
