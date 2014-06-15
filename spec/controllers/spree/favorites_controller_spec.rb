@@ -19,7 +19,7 @@ describe Spree::FavoritesController do
     context 'when invalid' do
       it 'fails' do
         # TODO remove this when testing non logged in users
-        @user = mock_model(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
+        @user = double(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
         controller.stub(:spree_current_user).and_return(@user)
 
         post :create, :id => 1, :format => :js, :type => 'Spree::Order', :use_route => 'spree'
@@ -33,10 +33,10 @@ describe Spree::FavoritesController do
       end
 
       before(:each) do
-        @favorite = mock_model(Spree::Favorite, :save => true)
+        @favorite = double(Spree::Favorite, :save => true)
         controller.stub(:authenticate_spree_user!).and_return(true)
         Spree::Favorite.stub(:new).and_return(@favorite)
-        @user = mock_model(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
+        @user = double(Spree::User, :favorites => Spree::Favorite, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
         controller.stub(:spree_current_user).and_return(@user)
       end
 
@@ -91,7 +91,7 @@ describe Spree::FavoritesController do
       @favorites.stub(:page).and_return(@favorites)
       @favorites.stub(:per).and_return(@favorites)
       Spree::Config.stub(:favorites_per_page).and_return('favorites_per_page')
-      @user = mock_model(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
+      @user = double(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
       controller.stub(:spree_current_user).and_return(@user)
     end
 
@@ -122,10 +122,10 @@ describe Spree::FavoritesController do
     end
 
     before do
-      @favorite = mock_model(Spree::Favorite)
+      @favorite = double(Spree::Favorite, destroy: true, favorable_id: 1, favorable_type: 'Spree::Product')
       @favorites = double('spree_favorites')
       @favorites.stub(:find).and_return(@favorite)
-      @user = mock_model(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
+      @user = double(Spree::User, :favorites => @favorites, :generate_spree_api_key! => false, :last_incomplete_spree_order => nil)
       controller.stub(:spree_current_user).and_return(@user)
     end
 

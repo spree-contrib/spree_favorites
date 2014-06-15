@@ -3,10 +3,10 @@ require 'spec_helper'
 describe Spree::Admin::FavoritesController do
   let(:role) { Spree::Role.create!(:name => 'user') }
   let(:roles) { [role] }
-  let(:product) { mock_model( Spree::Product) }
+  let(:product) { double(Spree::Product, id: 1) }
 
   before(:each) do
-    @user = mock_model(Spree::User, :generate_spree_api_key! => false)
+    @user = double(Spree::User, :generate_spree_api_key! => false)
     @user.stub_chain(:roles, :includes).and_return([])
     @user.stub(:has_spree_role?).with('admin').and_return(true)
     controller.stub(:spree_user_signed_in?).and_return(true)

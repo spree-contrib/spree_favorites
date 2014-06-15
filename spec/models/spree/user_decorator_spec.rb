@@ -17,11 +17,11 @@ describe Spree.user_class do
 
   describe 'has_favorite?' do
     context "when product in user's favorite products" do
-      it { @user.has_favorite?(@product1).should be_true }
+      it { @user.has_favorite?(@product1).should be true }
     end
 
     context 'when product is not in users favorite products' do
-      it { @user.has_favorite?(@product2).should be_false }
+      it { @user.has_favorite?(@product2).should be false }
     end
   end
 
