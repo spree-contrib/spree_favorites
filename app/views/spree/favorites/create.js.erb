@@ -1,3 +1,3 @@
 <% if @success %>
-  $("#favorable_<%= @favorable_type.demodulize.underscore %>_<%= @favorable_id %>").attr('href', '<%= favorite_path(@favorite, favorable_id: @favorable_id, favorable_type: @favorable_type) %>').data('method', 'delete').text('<%= Spree.t(:remove_favorite) %>')
+  $("#favorable_<%= @favorable_type.demodulize.underscore %>_<%= @favorable_id %>").attr('href', '<%= favorite_path(@favorite, favorable_id: @favorable_id, favorable_type: @favorable_type) %>').data('method', 'delete').html('<%= "<span class=\"glyphicon glyphicon-heart\"></span> #{Spree.t(:remove_favorite)}".html_safe %>')
 <% end %>
