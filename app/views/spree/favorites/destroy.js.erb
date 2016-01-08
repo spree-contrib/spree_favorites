@@ -1,6 +1,6 @@
 <% if @success %>
   if($("#favorable_<%= @favorable_type.demodulize.underscore %>_<%= @favorable_id %>").length) {
-    $("#favorable_<%= @favorable_type.demodulize.underscore %>_<%= @favorable_id %>").attr('href', '<%= favorites_path(favorable_id: @favorite.favorable_id, favorable_type: @favorite.favorable_type) %>').data('method', 'post').text('<%= Spree.t(:add_favorite) %>')
+    $("#favorable_<%= @favorable_type.demodulize.underscore %>_<%= @favorable_id %>").attr('href', '<%= favorites_path(favorable_id: @favorite.favorable_id, favorable_type: @favorite.favorable_type) %>').data('method', 'post').html('<%= "<span class=\"glyphicon glyphicon-heart-empty\"></span> #{Spree.t(:add_favorite)}".html_safe %>')
   } else {
     $("#favorite_<%= @favorite.id %>").remove();
   }
