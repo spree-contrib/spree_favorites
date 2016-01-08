@@ -18,9 +18,10 @@ module Spree
         render :status => status
       end
 
-      # DELETE api/favorites/1.json?token=TOKEN&id=PRODUCT_ID
-      def destroy
-        @favorite = @current_api_user.favorites.find(params[:id])
+      # DELETE api/favorites/unfavorite.json?token=TOKEN&product_id=PRODUCT_ID
+      def unfavorite
+        @favorite = @current_api_user.favorites.find_by(favorable_id: params[:product_id], favorable_type: "Spree::Product")
+        
         status = 422
         if @favorite
           @success = @favorite.destroy ? true : false

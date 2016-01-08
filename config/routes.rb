@@ -9,6 +9,7 @@ Spree::Core::Engine.add_routes do
   namespace :api, defaults: { format: 'json' } do
     resources :favorites, :only => [:index, :create, :destroy] do
       get :users, :on => :member
+      delete :unfavorite, :on => :collection
     end
   end
 
