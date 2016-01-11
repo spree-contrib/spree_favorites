@@ -3,6 +3,7 @@ Spree::Core::Engine.add_routes do
   namespace :admin do
     resources :favorites, :only => :index do
       get :users, :on => :member
+      delete :unfavorite, :on => :collection
     end
   end
 
